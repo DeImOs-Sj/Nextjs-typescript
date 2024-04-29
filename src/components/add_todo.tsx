@@ -5,6 +5,7 @@ import { useTodos } from '@/store/Todos'
 const add_todo = () => {
 
     const [todo, setTodo] = useState('');
+    console.log(todo)
 
     const { handleAddTodo } = useTodos();
 
