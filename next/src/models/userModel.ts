@@ -1,47 +1,49 @@
-import { verify } from "crypto"
-import mongoose from "mongoose"
+import { verify } from "crypto";
+import mongoose from "mongoose";
 
+// Define the User schema interface
+interface UserSchema extends mongoose.Schema {
+  username: string;
+  email: string;
+  password: string;
+  isVerified: boolean;
+  isAdmin: boolean;
+  forgotPasswordToken?: string; // Optional property
+  forgotPasswordTokenExpiry?: Date; // Optional property
+  verifyToken?: string; // Optional property
+  verifyTokenExpiry?: Date; // Optional property
+}
 
-const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema<UserSchema>({
+  username: {
+    type: String,
+    required: [true, "Please provide a username"],
+    unique: true,
+  },
+  email: {
+    type: String,
+    required: [true, "Please provide a email"],
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: [true, "Please provide a password"],
+  },
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
+  isAdmin: {
+    type: Boolean,
+    default: false,
+  },
+  forgotPasswordToken: String,
+  forgotPasswordTokenExpiry: Date,
+  verifyToken: String,
+  verifyTokenExpiry: Date,
+});
 
-    username: {
-        type: String,
-        required: [true, "Please provide a username"],
-        unique:true
-    },
-    email: {
-        
-           type: String,
-        required: [true, "Please provide a email"],
-        unique:true
-    },
-     password: {
-        
-           type: String,
-        required: [true, "Please provide a password"],
-    },
-        isVeirified: {
-        
-            type: Boolean,
-            default:false
-    },
-            isAdmin: {
-        
-            type: Boolean,
-            default:false 
-            },
-            forgotPasswordToken: String,
-    forgotPasswordTokenExpiry: Date,
-    verifyToken: String,
-    verifyTokenExpiry:Date
+// Create the User model with explicit name and schema
+const User = mongoose.model<UserSchema>("users", userSchema);
 
-
-
-
-
-})
-
-
-const User = mongoose.model.users || mongoose.model("users", userSchema)
-
-export default User
+export default User;
