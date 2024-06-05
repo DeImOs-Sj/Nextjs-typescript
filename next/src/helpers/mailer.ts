@@ -1,5 +1,8 @@
+import { verify } from 'crypto'
 import { SocketAddress } from 'net'
 import nodemailer from 'nodemailer'
+import bcrypt from "bcryptjs"
+import User from '@/models/userModel'
 
 
 
@@ -8,26 +11,39 @@ export const sendEmail = async({ email, emailType, userId }:any)=> {
 
         //creating logic 
 
-        const transporter = nodemailer.createTransport({
-            host: "smtp.forwardemail.net",
-            port: 465,
-            secure: true,
-            auth: {
-                user: "TestContext",
-                pass:"TestContext",
+
+
+       const hashedToken =  await bcrypt.hash(userId.toString(),10)
+
+        if (emailType === "VERIFY") {
+
+
+            await User.findByIdAndUpdate(userId,
+                {verifyToken:hashedToken,verifyTokenExpriy:Date.now()+360000}
+            )
             
-            },
-        })
+        } else if (emailType === "RESET") {
+            
+            await User.findByIdAndUpdate(userId,{forgotPassword:hashedToken,forgotPasswordTokenExpiry:Date.now()+360000})
+        }
 
 
+        var transporter = nodemailer.createTransport({
+        host: "sandbox.smtp.mailtrap.io",
+        port: 2525,
+        auth: {
+         user: "51883b59c545d3",
+        pass: "********8417"
+  }
+});
         const mailOptions = {
             from: "test@gmail.com",
             to: email,
             subject: emailType === 'VERIFY'?"Verify your email":"Reset your password",
-            html:"<b>Hello world</b>"
+            html:`<b>Click Here <a href="${process.env.DOMAIN}/verifyemail?token=${hashedToken}"> Here </a>to${emailType === "VERIFY"? "verify your email":"reset your password"}</b>`
         }
 
-        const mailResponse = await.sendMail(mailOptions)
+        const mailResponse = await transporter.sendMail(mailOptions)
         
     } catch(error:any) {
         
