@@ -19,12 +19,12 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
 
 
             await User.findByIdAndUpdate(userId,
-                { verifyToken: hashedToken, verifyTokenExpriy: Date.now() + 360000 }
-            )
+                {verifyToken: hashedToken, verifyTokenExpiry: Date.now() + 3600000})
+            
             
         } else if (emailType === "RESET") {
             
-            await User.findByIdAndUpdate(userId, { forgotPassword: hashedToken, forgotPasswordTokenExpiry: Date.now() + 360000 })
+            await User.findByIdAndUpdate(userId, {forgotPasswordToken: hashedToken, forgotPasswordTokenExpiry: Date.now() + 3600000})
         }
 
 
@@ -32,18 +32,23 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
             host: "sandbox.smtp.mailtrap.io",
             port: 2525,
             auth: {
-                user: "51883b59c545d3",
-                pass: "********8417"
+                user: "39b3eb0ab6a8b5",
+                pass: "82847300756e3b"
             }
         });
-        const mailOptions = {
-            from: "test@gmail.com",
+      
+       const mailOptions = {
+            from: 'hitesh@gmail.com',
             to: email,
-            subject: emailType === 'VERIFY' ? "Verify your email" : "Reset your password",
-            html: `<b>Click Here <a href="${process.env.DOMAIN}/verifyemail?token=${hashedToken}"> Here </a>to${emailType === "VERIFY" ? "verify your email" : "reset your password"}</b>`
-        }
-
+            subject: emailType === "VERIFY" ? "Verify your email" : "Reset your password",
+            html: `<p>Click <a href="${process.env.DOMAIN}/verifyemail?token=${hashedToken}">here</a> to ${emailType === "VERIFY" ? "verify your email" : "reset your password"}
+            or copy and paste the link below in your browser. <br> ${process.env.DOMAIN}/verifyemail?token=${hashedToken}
+            </p>`
+       }
+        
         const mailResponse = await transporter.sendMail(mailOptions)
+                return mailResponse;
+
         
     } catch (error: any) {
         

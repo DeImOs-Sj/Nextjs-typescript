@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "User already exits" },
                 {status:400})
         }
-        const salt = await  bcrypt.genSaltSync(10)
+        const salt =   bcrypt.genSaltSync(10)
 
         const hashedPassword = await bcrypt.hash(password, salt)
         
@@ -37,8 +37,11 @@ export async function POST(request: NextRequest) {
 
 
         const savedUser = await newUser.save()
-        console.log(savedUser)
+        console.log(savedUser , "hi this is the user ")
 
+        console.log(savedUser._id, "this is the id")
+        
+        // console.log(emailType)
 
         await sendEmail({ email, emailType: "VERIFY", userId: savedUser._id })
         

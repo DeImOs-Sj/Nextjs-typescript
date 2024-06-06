@@ -44,6 +44,6 @@ const userSchema = new mongoose.Schema<UserSchema>({
 });
 
 // Create the User model with explicit name and schema
-const User = mongoose.model<UserSchema>("users", userSchema);
+const User = mongoose.models.User ||mongoose.model("User", userSchema);
 
 export default User;
