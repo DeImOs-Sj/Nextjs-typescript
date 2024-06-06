@@ -1,11 +1,14 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose, { ConnectOptions, mongo } from "mongoose";
 
 
 export async function connect() {
 
     try {
 
-        mongoose.connect(process.env.MONGO_URI!)
+        mongoose.connect(process.env.MONGO_URI!,{
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+} as ConnectOptions)
 
         const connection = mongoose.connection
 
