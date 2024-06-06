@@ -14,13 +14,23 @@ export async function POST(request: NextRequest) {
         
         const { token } = reqBody
         console.log(token)
-
+ 
         const user = await User.findOne({verifyToken:token,verifyTokenExpiry:{$gt:Date.now()}})
 
 
         if (!user) {
-            return NextResponse.json({error:""})
+            return NextResponse.json({error:"Invalid response"})
         }
+        console.log(user)
+
+        user.isVerified = true
+        user.verifyToken = undefined
+        user.verifyTokenExpiry = undefined
+        
+        await user.save()
+
+        return NextResponse.json({message:"Email verified successfully "})
+        
         
     } catch(error:any) {
         
