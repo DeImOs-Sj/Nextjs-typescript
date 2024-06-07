@@ -1,7 +1,7 @@
 'use client'
 
 
-import { React, useEffect, useState } from 'react'
+import {  useEffect, useState } from 'react'
 import axios from 'axios'
 import { toast } from "react-hot-toast"
 import {useRouter} from "next/navigation"
@@ -68,7 +68,26 @@ const page = () => {
 
   return (
       <div>
-          Signup page
+          <h1>{loading ? "Processing" : "Signup"}</h1>
+          <label htmlFor="username">username</label>
+          <input id='uesrname' value={user.username}
+              type='text'
+              onChange={(e)=>setUser({...user,username:e.target.value})}
+          
+          />
+            <label htmlFor="email">Email</label>
+          <input id='email' value={user.username}
+              type='text'
+              onChange={(e)=>setUser({...user,username:e.target.value})}
+          
+          />
+            <label htmlFor="username">password</label>
+          <input id='uesrname' value={user.username}
+              type='text'
+              onChange={(e)=>setUser({...user,username:e.target.value})}
+          
+          />
+
       
     </div>
   )
