@@ -37,6 +37,7 @@ const page = () => {
             router.push('/login')
     
         } catch (error) {
+            alert("Enter the details ")
             console.log(error)
 
 }
@@ -70,23 +71,25 @@ const page = () => {
       <div>
           <h1>{loading ? "Processing" : "Signup"}</h1>
           <label htmlFor="username">username</label>
-          <input id='uesrname' value={user.username}
+          <input id='uesrname'  className='text-black' value={user.username}
               type='text'
               onChange={(e)=>setUser({...user,username:e.target.value})}
           
           />
             <label htmlFor="email">Email</label>
-          <input id='email' value={user.username}
+          <input id='email' className='text-black' value={user.email}
               type='text'
-              onChange={(e)=>setUser({...user,username:e.target.value})}
+              onChange={(e)=>setUser({...user,email:e.target.value})}
           
           />
             <label htmlFor="username">password</label>
-          <input id='uesrname' value={user.username}
+          <input id='password' className='text-black' value={user.password}
               type='text'
-              onChange={(e)=>setUser({...user,username:e.target.value})}
+              onChange={(e)=>setUser({...user,password:e.target.value})}
           
           />
+
+          <button onClick={onSignup}>Click me </button>
 
       
     </div>
